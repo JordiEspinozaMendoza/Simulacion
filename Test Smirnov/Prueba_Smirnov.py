@@ -23,7 +23,7 @@ def clickSolve():
 
 
 Label(main, text="Prueba de kolmogorov-smirnov",
-      font=("Arial", 14)).grid(row=0, column=0, sticky='LEFT')
+      font=("Arial", 14)).grid(row=0, column=0)
 Label(main, text="Inserte el numero de alpha: ").grid(row=1, column=0)
 
 TxtAlpha = tk.Entry(main)
