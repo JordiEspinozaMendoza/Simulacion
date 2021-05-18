@@ -43,4 +43,4 @@ Label2.grid(sticky='NW')
 
 Label3.grid(sticky='NW')
 
-main.mainloop()
+main.mainloop()#Buenos dias
