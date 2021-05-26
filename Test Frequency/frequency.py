@@ -2,8 +2,8 @@ import sys
 import os
 import pandas as pad
 from pandas.core.frame import DataFrame
-from generator import *
-from table_chi import *
+from scripts.generator import *
+from scripts.table_chi import *
 
 
 class TestFrequency:
