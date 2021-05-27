@@ -107,7 +107,7 @@ class inventory_system:
     stop = False
     # End data for generator
 
-    # Data for simulation awaiting
+    # Data for simulat------------------------ion awaiting
     data_simulation = {
         "month": [],
         "reorder": [],
@@ -124,7 +124,9 @@ class inventory_system:
         "month_delivered": [],
     }
     # Constructor
-    def __init__(self):
+    def __init__(self, R, Q):
+        self.R = R
+        self.Q =Q
         Recursivo(
             self.X0,
             self.a,
@@ -135,7 +137,6 @@ class inventory_system:
             self.arraySeed,
             self.data_generator,
         )
-
     # Methods for limits
     def Calc_probability_delivery(self):
         self.cumulative_probability_delivery = {"months": [], "L_inf": [], "L_sup": []}
@@ -345,7 +346,7 @@ class inventory_system:
             print(str(err))
 
 
-A = inventory_system()
+A = inventory_system(100,200)
 A.Calc_probability_month()
 A.Calc_probability_delivery()
 A.Simulation()

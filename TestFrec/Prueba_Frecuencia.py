@@ -27,10 +27,9 @@ menubar.add_cascade(label="Ayuda", menu=helpmenu)
 
 # Properties
 root.title("Prueba de frecuencia")
-root.resizable(False, False)
 
-app_width = 900
-app_height = 600
+app_width = 800
+app_height = 700
 
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
@@ -55,7 +54,7 @@ def clickedGenerator():
         res, chi_table, chi_calc, df = test.solve()
         trv["column"] = list(res.columns)
     except Exception as e:
-        messagebox.showinfo("Error", str(e))
+        messagebox.showinfo("Error", "Ingresa valores correctos para la simulacion")
     for column in trv["column"]:
         trv.heading(column, text=column)
     df_rows = res.to_numpy().tolist()
@@ -87,7 +86,7 @@ Label(root, text="Prueba de frecuencia",  font=(
 # Contenedores
 wrapper1 = LabelFrame(root, text="Resultados")
 wrapper2 = LabelFrame(root, text="Datos de entrada para la simulacion")
-wrapper3 = LabelFrame(root, text="Numeros generados")#YA 
+wrapper3 = LabelFrame(root, text="Numeros generados")
 wrapper4 = LabelFrame(root, text="Numeros pseudoaleatorios generados")
 
 wrapper2.pack(fill="both", expand="yes", padx=20, pady=10)
@@ -99,8 +98,8 @@ wrapper1.pack(fill="both", expand="yes", padx=20, pady=10)
 # Resultados
 
 trv = ttk.Treeview(wrapper1, columns=("Intervalo", "FE",
-                   "FO", "Grupo"), show="headings", height="6")
-trv.pack(pady=10)
+                   "FO", "Grupo"), show="headings", height="2")
+trv.pack(pady=10, fill='x')
 trv.heading('Intervalo', text='Intervalo', anchor="w")
 trv.heading('FE', text='FE', anchor="w")
 trv.heading('FO', text='FO', anchor="w")
@@ -109,7 +108,7 @@ trv.heading('Grupo', text='Grupo', anchor="w")
 # Numeros pseudo
 trv2 = ttk.Treeview(wrapper3, columns=(
     "n", "Xn", "Xn+1", "Rn"), show='headings', height='2')
-trv2.pack(pady=10)
+trv2.pack(pady=10, fill='x')
 trv2.heading('n', text='n', anchor="w")
 trv2.heading('Xn', text='Xn', anchor="w")
 trv2.heading('Xn+1', text='Xn+1', anchor="w")
@@ -119,26 +118,7 @@ trv2.heading('Rn', text='Residuo', anchor="w")
 chi_table_result = Label(wrapper1, text="")
 chi_table_result.pack()
 
-# Fin resultados
-
-# Info para el generador
-# LabelX = Label(wrapper3,text="X").grid(row=1,column=0,padx=5,pady=3,sticky='w')
-# EntradaX = Entry(wrapper3)
-# EntradaX.grid(row=1,column=1,padx=3,pady=3)
-
-# Labela=Label(wrapper3,text="a").grid(row=2,column=0,padx=5,pady=3,sticky='w')
-# Entradaa = Entry(wrapper3)
-# Entradaa.grid(row=2,column=1,padx=3,pady=3)
-
-# Labelc=Label(wrapper3,text="c").grid(row=3,column=0,padx=5,pady=3,sticky='w')
-# Entradac = Entry(wrapper3)
-# Entradac.grid(row=3,column=1,padx=3,pady=3)
-
-# Labelm=Label(wrapper3,text="m").grid(row=4,column=0,padx=5,pady=3,sticky='w')
-# Entradam = Entry(wrapper3)
-# Entradam.grid(row=4,column=1,padx=3,pady=3)
-# Fin info para el generador
-
+# Fin resultado
 # Info para el simulador
 lbl2 = Label(wrapper2, text="Cantidad de grupos").grid(
     row=1, column=0, padx=5, pady=3, sticky='w')
@@ -154,5 +134,5 @@ btn = Button(wrapper2, text="Calcular", command=clickedGenerator)
 btn.grid(column=0, row=3, pady=5, padx=6, sticky="W")
 # Fin info para el simulador
 
-root.geometry("800x600")
+
 root.mainloop()
