@@ -1,6 +1,7 @@
 import pandas as pd
 from scripts.generator import *
 import random
+import matplotlib.pyplot as plt
 
 
 class inventory_system:
@@ -94,8 +95,8 @@ class inventory_system:
     # Data for simulation
     cumulative_probability_delivery = {"months": [], "L_inf": [], "L_sup": []}
     cumulative_probability = {"qty": [], "L_inf": [], "L_sup": []}
-    Q = 200
-    R = 100
+    Q = 0
+    R = 0
     # Data for generator
     data_generator = {"n": [], "Xn": [], "Xn+1": [], "Rn": []}
     arraySeed = []
@@ -123,23 +124,18 @@ class inventory_system:
         "Ri2": [],
         "month_delivered": [],
     }
+    dfFinal = None
     # Constructor
-    def __init__(self, R, Q):
+
+    def __init__(self, R, Q, df):
         self.R = R
-        self.Q =Q
-        Recursivo(
-            self.X0,
-            self.a,
-            self.c,
-            self.m,
-            self.counter,
-            self.stop,
-            self.arraySeed,
-            self.data_generator,
-        )
+        self.Q = Q
+        self.data_generator = df
+
     # Methods for limits
     def Calc_probability_delivery(self):
-        self.cumulative_probability_delivery = {"months": [], "L_inf": [], "L_sup": []}
+        self.cumulative_probability_delivery = {
+            "months": [], "L_inf": [], "L_sup": []}
 
         for i in range(0, len(self.initial_values["prob_delivery_months"]["months"])):
             self.cumulative_probability_delivery["months"].append(
@@ -186,6 +182,13 @@ class inventory_system:
     counterMonth = None
     missingQty = 0
     counterRn = 0
+    counterOrder = 0
+    def CreatePlot(self):
+        data = {'Month': self.dfFinal['month'],
+                'data': self.dfFinal['dem_sim']}
+        df = pd.DataFrame(data, columns=['Month', 'data'])
+        df.plot(x='Month', y='data', kind='line')
+        plt.show()
     # Main simulation
     def Simulation(self):
         try:
@@ -254,12 +257,14 @@ class inventory_system:
                             new_inv = self.data_simulation["inv_final"][y] + self.Q
                             new_inv = new_inv - self.missingQty
                             self.missingQty = 0
-                            self.data_simulation["month_delivered"].append("---")
+                            self.data_simulation["month_delivered"].append(
+                                "---")
                             self.data_simulation["Ri2"].append("---")
                             self.data_simulation["order"].append(0)
                         else:
                             self.counterMonth += 1
-                            self.data_simulation["month_delivered"].append("---")
+                            self.data_simulation["month_delivered"].append(
+                                "---")
                             self.data_simulation["Ri2"].append("---")
                             self.data_simulation["order"].append(0)
                     # If we not have a order
@@ -268,7 +273,8 @@ class inventory_system:
                         self.counterRn += 1
                         self.data_simulation["Ri2"].append(randomRn)
                         for i in range(
-                            0, len(self.cumulative_probability_delivery["months"])
+                            0, len(
+                                self.cumulative_probability_delivery["months"])
                         ):
                             l_inf = self.cumulative_probability_delivery["L_inf"][i]
                             l_sup = self.cumulative_probability_delivery["L_sup"][i]
@@ -281,7 +287,8 @@ class inventory_system:
                                     "months"
                                 ][i]
                                 self.orderActive = True
-                                self.data_simulation["order"].append(1)
+                                self.counterOrder+=1
+                                self.data_simulation["order"].append(self.counterOrder)
                 else:
                     # If we have a order
                     if self.orderActive == True:
@@ -292,12 +299,14 @@ class inventory_system:
                             new_inv = self.data_simulation["inv_final"][y] + self.Q
                             new_inv = new_inv - self.missingQty
                             self.missingQty = 0
-                            self.data_simulation["month_delivered"].append("---")
+                            self.data_simulation["month_delivered"].append(
+                                "---")
                             self.data_simulation["Ri2"].append("---")
                             self.data_simulation["order"].append(0)
                         else:
                             self.counterMonth += 1
-                            self.data_simulation["month_delivered"].append("---")
+                            self.data_simulation["month_delivered"].append(
+                                "---")
                             self.data_simulation["Ri2"].append("---")
                             self.data_simulation["order"].append(0)
                     # If we not have a order
@@ -337,16 +346,16 @@ class inventory_system:
                         )
                         / 2
                     )
-            df = pd.DataFrame(self.data_simulation)
-
-            print(df.to_string())
+            self.dfFinal = pd.DataFrame(self.data_simulation)
+            # self.CreatePlot()
+            return self.dfFinal
             # print(self.data_simulation)
         except Exception as err:
             print(self.data_simulation)
             print(str(err))
 
 
-A = inventory_system(100,200)
-A.Calc_probability_month()
-A.Calc_probability_delivery()
-A.Simulation()
+# A = inventory_system(100,200)
+# A.Calc_probability_month()
+# A.Calc_probability_delivery()
+# A.Simulation()
