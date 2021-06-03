@@ -6,9 +6,9 @@ import tkinter
 
 
 class Test_Smirnov:
-    porcent = "0%"
+    porcent = 0
     n = 0
-
+    approved = False
     def __init__(self, porcent, n, df):
         self.data_generator = {
             "n": [],
@@ -73,12 +73,14 @@ class Test_Smirnov:
                 print(f"El valor de tablas es {aprox}")
             else:
                 aprox = (1.63/math.sqrt(self.n))
-                print(aprox)
+        print(aprox)
         print("El valor maximo de Di es: " + str(max(Di)))
         if aprox < max(Di):
             message = "Los numeros Si estan distribuidos uniformemente de acuerdo a la prueba de kolmogorov-smirnov"
+            self.approved = True
         else:
             message = "Los numeros No estan distribuidos uniformemente de acuerdo a la prueba de kolmogorov-smirnov"
+            self.approved = False
 
         # retornacion de valoraciones infravaloradas
         return {'message': message, 'max': max(Di), 'aprox': aprox}

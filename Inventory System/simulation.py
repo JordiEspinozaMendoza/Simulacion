@@ -131,6 +131,21 @@ class inventory_system:
         self.R = R
         self.Q = Q
         self.data_generator = df
+        self.data_simulation = {
+            "month": [],
+            "reorder": [],
+            "inv_initial": [],
+            "Ri": [],
+            "dem_sim": [],
+            "seasonal_factors": [],
+            "dem_adjust": [],
+            "inv_final": [],
+            "missing": [],
+            "order": [],
+            "inv_monthly": [],
+            "Ri2": [],
+            "month_delivered": [],
+        }                
 
     # Methods for limits
     def Calc_probability_delivery(self):
@@ -346,9 +361,10 @@ class inventory_system:
                         )
                         / 2
                     )
-            self.dfFinal = pd.DataFrame(self.data_simulation)
+            # self.dfFinal = pd.DataFrame(self.data_simulation)
             # self.CreatePlot()
-            return self.dfFinal
+            print(self.data_simulation)
+            return self.data_simulation
             # print(self.data_simulation)
         except Exception as err:
             print(self.data_simulation)

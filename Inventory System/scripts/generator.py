@@ -2,7 +2,7 @@ import sys
 import os
 import pandas as pd
 
-sys.setrecursionlimit(5000)
+sys.setrecursionlimit(10000)
 
 def Operacion(X, a, c, m):
      Resi = ((a*X)+c) % m
@@ -19,7 +19,7 @@ def Recursivo(X0, a, c, m, conta,Detener, ArraySemilla, data):
             if X0==Semilla:
                 Detener = True
     
-        if Detener==True or conta==325:
+        if Detener==True or conta==10000:
             pass
         else:         
             data["n"].append(conta+1)
