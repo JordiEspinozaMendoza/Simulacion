@@ -11,6 +11,7 @@ def Operacion(X, a, c, m):
 def createDataFrame(data):
     df = pd.DataFrame(data, columns=["n","Xn","Xn+1","Rn"])
     cols = list(df.columns)
+    print(df["Rn"].to_list())
     return df.to_string(), df, cols
 
 def Recursivo(X0, a, c, m, conta,Detener, ArraySemilla, data):

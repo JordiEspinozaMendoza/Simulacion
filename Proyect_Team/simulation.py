@@ -64,6 +64,7 @@ class inventory_system:
             0.005,
         ],
     }
+
     prob_delivery_months = {"months": [1, 2, 3], "prob": [0.30, 0.40, 0.30]}
     seasonal_factors = {
         "month": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -86,12 +87,13 @@ class inventory_system:
         "inv_initial": 150,
         "order_cost": 50,
         "inventory_cost": 26,
-        "cost_absences": 25,
+        "cost_missing": 25,
         "days_year": 260,
         "month_demand": month_demand,
         "prob_delivery_months": prob_delivery_months,
         "seasonal_factors": seasonal_factors,
     }
+    finalResults = ""
     # Data for simulation
     cumulative_probability_delivery = {"months": [], "L_inf": [], "L_sup": []}
     cumulative_probability = {"qty": [], "L_inf": [], "L_sup": []}
@@ -127,7 +129,7 @@ class inventory_system:
     dfFinal = None
     # Constructor
 
-    def __init__(self, R, Q, df):
+    def __init__(self, R, Q, df, costOrder, costInventory, costMissing):
         self.R = R
         self.Q = Q
         self.data_generator = df
@@ -145,7 +147,10 @@ class inventory_system:
             "inv_monthly": [],
             "Ri2": [],
             "month_delivered": [],
-        }                
+        }
+        self.initial_values["order_cost"] = costOrder
+        self.initial_values["inventory_cost"] = costInventory
+        self.initial_values["cost_missing"] = costMissing
 
     # Methods for limits
     def Calc_probability_delivery(self):
@@ -198,6 +203,7 @@ class inventory_system:
     missingQty = 0
     counterRn = 0
     counterOrder = 0
+
     def CreatePlot(self):
         data = {'Month': self.dfFinal['month'],
                 'data': self.dfFinal['dem_sim']}
@@ -205,6 +211,7 @@ class inventory_system:
         df.plot(x='Month', y='data', kind='line')
         plt.show()
     # Main simulation
+
     def Simulation(self):
         try:
             # We simulate 12 months (1 year)
@@ -285,7 +292,7 @@ class inventory_system:
                     # If we not have a order
                     else:
                         randomRn = self.data_generator["Rn"][self.counterRn]
-                        self.counterRn += 1
+                        self.counterRn += 1  # Contador
                         self.data_simulation["Ri2"].append(randomRn)
                         for i in range(
                             0, len(
@@ -302,8 +309,9 @@ class inventory_system:
                                     "months"
                                 ][i]
                                 self.orderActive = True
-                                self.counterOrder+=1
-                                self.data_simulation["order"].append(self.counterOrder)
+                                self.counterOrder += 1
+                                self.data_simulation["order"].append(
+                                    self.counterOrder)
                 else:
                     # If we have a order
                     if self.orderActive == True:
@@ -361,11 +369,23 @@ class inventory_system:
                         )
                         / 2
                     )
-            # self.dfFinal = pd.DataFrame(self.data_simulation)
+            self.dfFinal = pd.DataFrame(self.data_simulation)
+            print(self.dfFinal)
             # self.CreatePlot()
-            print(self.data_simulation)
-            return self.data_simulation
+            CostoTotalOrdenar = self.counterOrder*self.initial_values['order_cost']
+            CostoTotalInven = sum(i for i in self.data_simulation['inv_monthly'])*(self.initial_values['inventory_cost']/12)
+            CostoTotalFaltante = sum(i for i in self.data_simulation['missing'])*self.initial_values['cost_missing']
             # print(self.data_simulation)
+            self.finalResults += f"\nCosto total de ordenar: ${str(round(CostoTotalOrdenar,2))}"
+            self.finalResults += f"\nCosto total de inventario: ${str(round(CostoTotalInven,2))}"
+            self.finalResults += f"\nCosto total de faltante: ${str(round(CostoTotalFaltante,2))}"
+            costTotal = CostoTotalOrdenar + CostoTotalInven + CostoTotalFaltante
+            self.finalResults += f"\nCosto total : $ {str(round(costTotal,2))}"
+            
+            # print(self.finalResults)
+            # print(self.initial_values)
+            # print(self.data_simulation)
+            return self.data_simulation
         except Exception as err:
             print(self.data_simulation)
             print(str(err))

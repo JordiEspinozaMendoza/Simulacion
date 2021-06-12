@@ -6,9 +6,11 @@ class SimulationVolados:
     lose = 0
     initDinero = 0
     initApuesta = 0
-    def __init__(self, dinero, apuesta):
+    Limite = 0
+    def __init__(self, dinero, apuesta,Limite):
         self.initApuesta = apuesta
-        self.initDinero = dinero   
+        self.initDinero = dinero 
+        self.Limite = Limite  
 
     def RecursividadVolados(self, C, dinero, apuesta, num, numbers):
         Gano = "Gano SE REINICIA EL JUEGO\n\n"
@@ -21,7 +23,7 @@ class SimulationVolados:
             str(dinero - apuesta)+"\n\n"
 
         if C < numbers-1:
-            if dinero == 50:
+            if dinero == self.Limite:
                 self.results+=Gano # Mensaje de ganador
                 self.win+=1
                 C = C + 1
