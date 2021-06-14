@@ -110,7 +110,7 @@ class inventory_system:
     stop = False
     # End data for generator
 
-    # Data for simulat------------------------ion awaiting
+    # Data for simulation awaiting
     data_simulation = {
         "month": [],
         "reorder": [],
@@ -339,23 +339,13 @@ class inventory_system:
                         self.data_simulation["order"].append(0)
 
                 if self.data_simulation["inv_initial"][y] == 0:
-                    if self.data_simulation["inv_initial"][y] == 0:
-                        self.data_simulation["inv_monthly"].append(
-                            ((self.data_simulation["inv_final"][y]) / 2)
-                            * (
-                                self.data_simulation["inv_final"][y]
-                                / self.data_simulation["dem_adjust"][y]
-                            )
+                    self.data_simulation["inv_monthly"].append(
+                        ((self.data_simulation["inv_final"][y]) / 2)
+                        * (
+                            self.data_simulation["inv_final"][y]
+                            / self.data_simulation["dem_adjust"][y]
                         )
-                elif self.data_simulation["inv_final"][y] == 0:
-                    if self.data_simulation["inv_final"][y] == 0:
-                        self.data_simulation["inv_monthly"].append(
-                            ((self.data_simulation["inv_initial"][y]) / 2)
-                            * (
-                                self.data_simulation["inv_initial"][y]
-                                / self.data_simulation["dem_adjust"][y]
-                            )
-                        )
+                    )
                 elif (
                     self.data_simulation["inv_final"][y] == 0
                     and self.data_simulation["inv_initial"][y] == 0
